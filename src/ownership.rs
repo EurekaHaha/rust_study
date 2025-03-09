@@ -1,5 +1,4 @@
-#![allow(unused_variables)]
-#![allow(unused_doc_comments)]
+#![allow(unused)]
 
 fn main_0() {
     let s0 = String::from("hello");
@@ -39,8 +38,20 @@ fn main_3() {
 }
 // 赋值给一个变量时，所有权转移到新变量上。 当拥有队中数据值的变量离开作用域时，其值将被丢弃
 
+// # 参数前的&和类型前的&的区别
 fn main_4() {
+    let x = 5;
+    // y是对x的引用
+    let y = &x;
 
+    // &i32是指y是一个i32
+    fn add(x: i32, y: &i32) -> i32 {
+        x + y
+    }
+
+    add(x, y);
+    add(x, &x);
+    add(x, &y);
 }
 
 
