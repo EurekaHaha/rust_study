@@ -2,8 +2,8 @@
 
 use std::fmt::Debug;
 
-struct A {
-    a: i32,
+pub struct A {
+    pub a: i32,
 }
 
 // 实现普通的struct方法

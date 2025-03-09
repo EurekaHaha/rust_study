@@ -1,11 +1,13 @@
 #![allow(unused)]
 
 mod ownership;
-mod reference;
+// mod reference;
+mod lifetime;
 mod generics;
 mod slice;
 mod error;
 mod trait_;
+mod test;
 use std::fmt::Display;
 
 fn main() {
@@ -53,4 +55,14 @@ fn test_0() {
     // ! s1是displayable的返回值 只实现了Display trait 所以只能调用Display trait的方法
     // s1.push_str(" world");
     println!("{}", s1);
+}
+
+fn test_1_longest<'a, 'b>(s1: &'a str, s2: &'b str) -> &'a str {
+    if s1.len() > s2.len() {
+        return s1;
+    } else {
+        // ! 'b的生命周期可能比'a的生命周期短 所以这里会报错
+        // s2
+    }
+    s1
 }
