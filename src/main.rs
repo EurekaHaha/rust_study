@@ -8,6 +8,7 @@ mod slice;
 mod error;
 mod trait_;
 mod test;
+mod match_;
 use std::fmt::Display;
 
 fn main() {

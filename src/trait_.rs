@@ -1,6 +1,7 @@
 // @ 类似JAVA的接口和多态
 
 use std::fmt::Debug;
+use std::boxed::Box;
 
 pub struct A {
     pub a: i32,
@@ -89,9 +90,39 @@ fn test_trait_as_param_with_where<T, U>(item_0: &T, item_1: &U) -> i32
 }
 
 // trait 作为返回值
+
+struct C {
+    a: i32,
+}
+
+impl GetSelf for C {
+    fn a(&self) -> i32 {
+        self.a * 2
+    }
+}
+
 // # trait作为返回值的时候只能返回一种类型
-fn test_trait_as_return() -> impl GetSelf {
+fn test_trait_as_return(a: i32) -> impl GetSelf {
     A { a: 5 }
+
+    // 错误的写法 无法确定返回值类型
+    // * 因为rust会在编译时确定返回值类型 此时无法确定返回值类型
+    // if a > 0 {
+    //     A { a: 5 }
+    // } else {
+    //     C { a: 3 }
+    // }
+}
+
+// * 特征对象来解决返回值类型不确定的问题
+// * 关键字用于表示动态分发的 trait 对象 它允许你在运行时决定调用哪个具体的实现
+
+fn print_a_dyn(flag: bool) -> Box<dyn GetSelf> {
+    if flag {
+        Box::new(A { a: 5 })
+    } else {
+        Box::new(C { a: 3 })
+    }
 }
 
 // 使用trait有条件的实现方法
