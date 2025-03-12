@@ -147,3 +147,66 @@ impl<T: GetSelf + GetOther> B<T> {
 // blanket implementation
 // @ 为所有实现GetSelf的类型实现GetOther
 impl<T: GetSelf> GetOther for T {}
+
+
+// 调用不同特征 相同方法
+trait Helicopter {
+    fn fly(&self);
+    fn dead();
+}
+
+trait Airplane {
+    fn fly(&self) -> bool;
+    fn dead();
+}
+
+struct Kobe;
+
+impl Helicopter for Kobe {
+    fn fly(&self) {
+        println!("Kobe is flying");
+    }
+    fn dead() {
+        println!("Kobe is dead");
+    }
+}
+
+impl Airplane for Kobe {
+    fn fly(&self) -> bool {
+        true
+    }
+    fn dead() {
+        println!("Kobe is alive");
+    }
+}
+
+impl Kobe {
+    fn fly(&self) -> bool {
+        false
+    }
+    fn dead() {
+        println!("Kobe is definitely dead");
+    }
+}
+
+// * 有参数的情况可以传递self来调用不同的trait
+fn use_trait_same_method() {
+    let kobe = Kobe;
+    // @ 调用的是Kobe的方法
+    kobe.fly();
+    // @ 调用的是Airplane的方法
+    Airplane::fly(&kobe);
+    // @ 调用的是Helicopter的方法
+    Helicopter::fly(&kobe);
+}
+
+// * 无参数的情况只能通过trait来调用
+// * 此语法称为完全限定语法
+// * <Type as Trait>::function(receiver_if_method, next_arg, ...);
+fn use_trait_same_method_dead() {
+    let kobe = Kobe;
+    // @ 调用的是Airplane的方法
+    <Kobe as Airplane>::dead();
+    // @ 调用的是Helicopter的方法
+    <Kobe as Helicopter>::dead();
+}
