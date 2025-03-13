@@ -101,3 +101,16 @@ fn get_len(s: &String) -> usize {
 fn change(s: &mut String) {
     s.push_str(", world");
 }
+
+fn vec_0() {
+    let mut v = vec![1, 2, 3, 4, 5];
+
+    let first = &v[0];
+
+    v.push(6);
+
+    // ! 编译错误
+    // * 原因是因为first对v进行了不可变引用
+    // * 数组的大小是可变的，当旧数组的大小不够用时，Rust 会重新分配一块更大的内存空间，然后把旧数组拷贝过来。这种情况下，之前的引用显然会指向一块无效的内存
+    println!("The first element is: {}", first);
+}
