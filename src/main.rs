@@ -10,27 +10,37 @@ mod trait_;
 mod test;
 mod match_;
 use std::fmt::Display;
+use std::env;
 
 fn main() {
-    // let mut s = String::from("hello");
-    // let t = &mut s;
-    //
-    // t.push('2');
-    //
-    // println!("{}", t);
+    let args: Vec<String>  = env::args().collect();
+    let config = Config::new(&args);
+    let file_content = std::fs::read_to_string(config.file_path).expect("file not found");
 
-    // let mut s = String::from("hello");
-    // let s2 = &s;
-    // let s3 = &s;
-
-    // let mut hash_map = 
-
-    // s3.push_str(" world");
-
-    // println!("{}", s2);
-    error::set_fs_error();
-
+    println!("With text:\n{file_content}");
 }
+
+struct Config {
+    query: String,
+    file_path: String,
+}
+
+impl Config {
+    fn new(args: &[String]) -> Self {
+        if args.len() < 3 {
+            panic!("not enough arguments");
+        }
+        Config {
+            query: args[1].clone(),
+            file_path: args[2].clone(),
+        }
+    }
+}
+
+
+
+// ************************************************************************************************************** //
+
 
 fn get_first(v: &Vec<String>) -> &str {
     &v[0]
